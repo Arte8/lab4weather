@@ -11,6 +11,7 @@ from weathersummary import (
 from weathersummary.config import URL
 from weathersummary.errors import WeatherDataError
 from weathersummary.logging_config import setup_logging
+from weathersummary.report import save_run_info
 
 logger = logging.getLogger(__name__)
 
@@ -51,11 +52,13 @@ def main():
             print(date, values)
 
         output_file = save_summary(summary)
+        run_info_file = save_run_info(downloaded, len(readings), rejected)
 
         print("\nRecords downloaded:", downloaded)
         print("Records processed:", len(readings))
         print("Records rejected:", rejected)
         print("Summary saved to:", output_file)
+        print("Run information saved to:", run_info_file)
 
         return 0
 

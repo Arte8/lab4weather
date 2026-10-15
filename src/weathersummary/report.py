@@ -50,3 +50,29 @@ def save_summary(summary: dict[str, Any]) -> Path:
         json.dump(summary, file, indent=2, allow_nan=False)
 
     return OUTPUT_PATH
+
+
+def save_run_info(
+    downloaded: int,
+    processed: int,
+    rejected: int,
+) -> Path:
+    """Save execution information to a JSON file."""
+
+    from datetime import UTC, datetime
+
+    run_info_path = OUTPUT_PATH.parent / "run_info.json"
+
+    run_info = {
+        "timestamp": datetime.now(UTC).isoformat(),
+        "records_downloaded": downloaded,
+        "records_processed": processed,
+        "records_rejected": rejected,
+    }
+
+    run_info_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with run_info_path.open("w", encoding="utf-8") as file:
+        json.dump(run_info, file, indent=2)
+
+    return run_info_path
