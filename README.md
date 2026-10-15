@@ -45,6 +45,8 @@ Execute the weather summary application:
 python main.py
 ```
 An internet connection is required to download weather data from Open-Meteo.
+
+
 Run the automated tests:
 ```
 python -m pytest
