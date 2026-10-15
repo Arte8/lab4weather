@@ -1,4 +1,3 @@
-
 import pytest
 
 from weathersummary.errors import (
@@ -21,8 +20,7 @@ def test_weather_data_error():
 
 def test_missing_weather_fields():
     with pytest.raises(
-        WeatherDataError,
-        match="Missing or invalid weather data fields"
+        WeatherDataError, match="Missing or invalid weather data fields"
     ):
         process_weather({})
 
@@ -36,10 +34,7 @@ def test_mismatched_weather_arrays():
         }
     }
 
-    with pytest.raises(
-        WeatherDataError,
-        match="different lengths"
-    ):
+    with pytest.raises(WeatherDataError, match="different lengths"):
         process_weather(data)
 
 

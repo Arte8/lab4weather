@@ -1,4 +1,3 @@
-
 """Download weather data and return validated reading objects."""
 
 import logging
@@ -25,18 +24,13 @@ class WeatherSource:
         try:
             logger.info("Downloading weather data")
 
-            response = requests.get(
-                self.url,
-                timeout=self.timeout
-            )
+            response = requests.get(self.url, timeout=self.timeout)
             response.raise_for_status()
             data = response.json()
 
         except requests.RequestException as error:
             logger.error("Weather download failed: %s", error)
 
-            raise WeatherDownloadError(
-                f"Weather download failed: {error}"
-            ) from error
+            raise WeatherDownloadError(f"Weather download failed: {error}") from error
 
         return process_weather(data)

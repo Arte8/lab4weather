@@ -14,6 +14,7 @@ from weathersummary.logging_config import setup_logging
 
 logger = logging.getLogger(__name__)
 
+
 def main():
     """Run the application and display clear error messages."""
 
