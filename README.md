@@ -28,7 +28,7 @@ Clone the Lab 04 repository from GitHub:
 ```
 git clone https://github.com/Arte8/lab4weather
 
-cd cd lab4weather
+cd lab4weather
 
 conda env create -f environment.yml
 
