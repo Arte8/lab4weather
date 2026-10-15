@@ -27,10 +27,15 @@ Open Anaconda Prompt and navigate to the directory where you want to download th
 Clone the Lab 04 repository from GitHub:
 ```
 git clone https://github.com/Arte8/lab4weather
+
 cd cd lab4weather
+
 conda env create -f environment.yml
+
 conda activate module04-quality
+
 python -m pip install -r requirements.txt
+
 python -m pip install -e .
 ```
 python -m pip install pytest ruff mypy pandas-stubs types-requests
