@@ -8,7 +8,12 @@ import pandas as pd
 class WeatherReading:
     """Store one weather reading, cleaning its values during creation."""
 
-    def __init__(self, time, temperature, precipitation):
+    def __init__(
+        self,
+        time: str,
+        temperature: float,
+        precipitation: float,
+    ) -> None:
         self.time = pd.to_datetime(time, errors="raise")
 
         if pd.isna(self.time):
@@ -23,7 +28,7 @@ class WeatherReading:
         if self.precipitation < 0:
             raise ValueError("Negative precipitation")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"{self.time.isoformat()}: "
             f"{self.temperature} °C, "

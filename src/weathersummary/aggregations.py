@@ -5,12 +5,16 @@ from collections import defaultdict
 
 import pandas as pd
 
+from .models import WeatherReading
+
 
 class Aggregation(ABC):
     """Define the common interface for weather aggregations."""
 
+    key: str
+
     @abstractmethod
-    def compute(self, readings):
+    def compute(self, readings: list[WeatherReading]) -> object:
         """Calculate a result from validated weather readings."""
 
 
@@ -19,7 +23,7 @@ class OverallStatistics(Aggregation):
 
     key = "overall_statistics"
 
-    def compute(self, readings):
+    def compute(self, readings: list[WeatherReading]) -> dict[str, float]:
         # Use pandas to preserve the original Lab 02 calculations.
         df = pd.DataFrame(
             [(reading.temperature, reading.precipitation) for reading in readings],
@@ -42,8 +46,10 @@ class DailyStatistics(Aggregation):
 
     key = "daily_statistics"
 
-    def compute(self, readings):
-        daily_records = defaultdict(list)
+    def compute(
+        self, readings: list[WeatherReading]
+    ) -> dict[str, dict[str, float | int]]:
+        daily_records: defaultdict[str, list[tuple[float, float]]] = defaultdict(list)
 
         for reading in readings:
             date = reading.time.date().isoformat()
@@ -66,5 +72,5 @@ class UniqueDates(Aggregation):
 
     key = "unique_dates"
 
-    def compute(self, readings):
+    def compute(self, readings: list[WeatherReading]) -> list[str]:
         return sorted({reading.time.date().isoformat() for reading in readings})

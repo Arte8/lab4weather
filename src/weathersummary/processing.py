@@ -1,6 +1,7 @@
 """Convert raw weather data into validated reading objects."""
 
 import logging
+from typing import Any
 
 from .errors import WeatherDataError
 from .models import WeatherReading
@@ -8,7 +9,9 @@ from .models import WeatherReading
 logger = logging.getLogger(__name__)
 
 
-def process_weather(data):
+def process_weather(
+    data: dict[str, Any],
+) -> tuple[list[WeatherReading], int, int]:
     """Return valid readings, downloaded count, and rejected count."""
 
     try:

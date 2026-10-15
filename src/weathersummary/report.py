@@ -1,6 +1,8 @@
 """Build and save the weather summary."""
 
 import json
+from pathlib import Path
+from typing import Any
 
 from .aggregations import (
     DailyStatistics,
@@ -8,12 +10,18 @@ from .aggregations import (
     UniqueDates,
 )
 from .config import OUTPUT_PATH
+from .models import WeatherReading
 
 
-def create_summary(url, readings, downloaded, rejected):
+def create_summary(
+    url: str,
+    readings: list[WeatherReading],
+    downloaded: int,
+    rejected: int,
+) -> dict[str, Any]:
     """Build a summary using the original Lab 02 keys."""
 
-    summary = {
+    summary: dict[str, Any] = {
         "source_url": url,
         "records_downloaded": downloaded,
         "records_processed": len(readings),
@@ -33,7 +41,7 @@ def create_summary(url, readings, downloaded, rejected):
     return summary
 
 
-def save_summary(summary):
+def save_summary(summary: dict[str, Any]) -> Path:
     """Write the summary to the configured JSON output path."""
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
