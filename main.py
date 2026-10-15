@@ -1,4 +1,7 @@
 """Run the weather download, processing, and reporting workflow."""
+import logging
+
+from weathersummary.logging_config import setup_logging
 
 from weathersummary import (
     WeatherDownloadError,
@@ -11,6 +14,9 @@ from weathersummary.config import URL
 
 def main():
     """Run the application and display clear error messages."""
+
+    setup_logging()
+    logging.info("Weather application started")
 
     try:
         readings, downloaded, rejected = WeatherSource().download()
