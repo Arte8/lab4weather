@@ -32,3 +32,14 @@ def test_valid_weather_readings(temperature, precipitation):
             "invalid",
             0.2
         )
+
+def test_invalid_temperature_raises_error():
+    with pytest.raises(
+        ValueError,
+        match="could not convert string to float"
+    ):
+        WeatherReading(
+            "2026-10-01T12:00",
+            "invalid",
+            0.2
+        )
