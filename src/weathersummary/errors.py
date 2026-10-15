@@ -1,10 +1,14 @@
+
+"""Custom exceptions for the weather application."""
+
+
 class WeatherError(Exception):
-    """Base exception for weather application."""
+    """Base exception for weather-related errors."""
 
 
-class WeatherAPIError(WeatherError):
-    """Raised when weather API requests fail."""
+class WeatherDownloadError(WeatherError):
+    """Raised when a weather download fails."""
 
 
 class WeatherDataError(WeatherError):
-    """Raised when weather data is invalid."""
+    """Raised when the weather data structure is invalid."""
