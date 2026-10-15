@@ -1,13 +1,15 @@
+
 """Download weather data and return validated reading objects."""
+
+import logging
 
 import requests
 
 from .config import TIMEOUT, URL
+from .errors import WeatherDownloadError
 from .processing import process_weather
 
-
-class WeatherDownloadError(Exception):
-    """Represent a failed weather download."""
+logger = logging.getLogger(__name__)
 
 
 class WeatherSource:
@@ -21,11 +23,20 @@ class WeatherSource:
         """Return readings, downloaded count, and rejected count."""
 
         try:
-            response = requests.get(self.url, timeout=self.timeout)
+            logger.info("Downloading weather data")
+
+            response = requests.get(
+                self.url,
+                timeout=self.timeout
+            )
             response.raise_for_status()
             data = response.json()
 
         except requests.RequestException as error:
-            raise WeatherDownloadError(f"Weather download failed: {error}") from error
+            logger.error("Weather download failed: %s", error)
+
+            raise WeatherDownloadError(
+                f"Weather download failed: {error}"
+            ) from error
 
         return process_weather(data)
