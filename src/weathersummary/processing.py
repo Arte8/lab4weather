@@ -27,16 +27,21 @@ def process_weather(data):
     readings = []
     rejected = 0
 
-    for time, temperature, rainfall in zip(times, temperatures, precipitation):
+    for time, temperature, rainfall in zip(
+        times, temperatures, precipitation, strict=True
+    ):
         try:
             reading = WeatherReading(time, temperature, rainfall)
-
             readings.append(reading)
 
         except (ValueError, TypeError, OverflowError):
             rejected += 1
             logger.warning("Rejected invalid weather record")
 
-    logger.info("Processed %s records; rejected %s", len(readings), rejected)
+    logger.info(
+        "Processed %s records; rejected %s",
+        len(readings),
+        rejected,
+    )
 
     return readings, len(times), rejected
