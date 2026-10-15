@@ -21,3 +21,14 @@ def test_valid_weather_readings(temperature, precipitation):
 
     assert reading.temperature == temperature
     assert reading.precipitation == precipitation
+
+    def test_invalid_temperature_raises_error():
+    with pytest.raises(
+        (ValueError, TypeError),
+        match=".*"
+    ):
+        WeatherReading(
+            "2026-10-01T12:00",
+            "invalid",
+            0.2
+        )
