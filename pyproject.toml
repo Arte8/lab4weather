@@ -14,3 +14,20 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+src = ["src"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "LOG", "PIE", "RUF", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/weathersummary"]
+warn_unused_configs = true
