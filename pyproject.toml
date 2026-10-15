@@ -1,3 +1,4 @@
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
@@ -22,12 +23,15 @@ addopts = "-v"
 [tool.ruff]
 target-version = "py312"
 line-length = 88
-src = ["src"]
+src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "F", "I", "LOG", "PIE", "RUF", "SIM"]
+select = ["E", "F", "I", "B", "UP", "LOG", "PIE", "RUF", "SIM"]
 
 [tool.mypy]
 python_version = "3.12"
-files = ["src/weathersummary"]
+files = ["src"]
+disallow_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
 warn_unused_configs = true

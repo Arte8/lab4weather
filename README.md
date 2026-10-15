@@ -1,129 +1,137 @@
-Weather summary lab3
+# Weather Summary — Lab 04 Software Quality
 
-This project downloads Toronto hourly weather data from Open-Meteo, validates each reading, calculates statistics, and saves a JSON summary.
+**Humber College AI511**
 
-Open Anaconda Prompt in the repository folder:
-clone into new folder 
+## Project Overview
 
-**git clone https://github.com/ARTE8/lab3weather.git weather-summary-review**
+This Python application downloads hourly Toronto weather data from the Open-Meteo API, validates individual weather readings, calculates overall and daily statistics, and saves the results as a JSON summary.
 
-**cd weather-summary-review**   or root folder
+Lab 04 builds on the Lab 03 object-oriented weather application by introducing automated testing, custom exception handling, logging, static type checking, linting, formatting, and centralized tool configuration.
 
-**conda env create -n weather-summary-review -f environment.yml**
+## Data Source
 
-**conda activate weather-summary-review**
+**API:** https://open-meteo.com/
 
-**python -m pip install -e .**
+Each record represents one hour of weather observations or historical model data, including:
 
-**python main.py**
+- Timestamp
+- Temperature in degrees Celsius
+- Precipitation in millimetres
 
+The application requires at least 50 downloaded records and 50 valid readings to generate a summary.
+
+## Installation and Setup
+
+Open Anaconda Prompt and navigate to the directory where you want to download the project:
 ```
+Clone the Lab 04 repository from GitHub:
+```
+git clone https://github.com/Arte8/lab4weather
+```
+Navigate into the cloned project folder:
+```
+cd cd lab4weather
+```
+Create the Lab 04 Conda environment using the project's environment file:
+```
+conda env create -f environment.yml
+```
+Activate the environment specified in environment.yml. 
+```
+conda activate weather-lab3
+```
+Install the application in editable mode:
+```
+python -m pip install -e .
+```
+Install any development dependencies not already included in the environment:
+```
+python -m pip install pytest ruff mypy pandas-stubs types-requests
+```
+Execute the weather summary application:
+```
+python main.py
+```
+An internet connection is required to download weather data from Open-Meteo.
+Run the automated tests:
+```
+python -m pytest
+```
+Check code quality with Ruff:
+```
+python -m ruff check src\weathersummary main.py tests
+```
+Verify code formatting:
+```
+python -m ruff format --check src\weathersummary main.py tests
+```
+Perform static type checking:
+```
+python -m mypy
+``` 
+## Running the Application
 
-The editable installation allows importing `weathersummary` without
-changing `sys.path`.
-
-
-Internet access is required for downloading weather data.
-The output is saved to `data/processed/summary.json`.
-
-At least 50 downloaded records and 50 valid readings are required.
-Download failures print a clear message and exit without a traceback.
-
-With the environment activated, run:
+From the project root:
 
 ```cmd
-python -m unittest discover -s tests
+python main.py
 ```
 
-The tests use hand-made records and do not access the network.
-They check numeric conversion, rejection of invalid values, and the record's string representation.
+The application downloads and processes the weather data, displays statistics, and writes the summary to:
 
+`data/processed/summary.json`
 
-- `config.py`: source URL, request timeout, and relative output path. - `models.py`: `WeatherReading`, which validates values in `__init__`. - `sources.py`: `WeatherSource`, which returns reading objects and counts.
-  This is the only module importing `requests`.
-- `processing.py`: constructs readings and counts rejected records.
-- `aggregations.py`: the `Aggregation` base class and subclasses.
-- `report.py`: builds the summary and writes JSON.
-- `__init__.py`: re-exports the public classes and functions.
-- `main.py`: connects the components and prints results or errors.
+An internet connection is required for live weather downloads.
 
-- | Lab 02 function | Where the code lives now |
+## Project Structure
+
+| File | Responsibility |
 |---|---|
-| `download_weather(url)` | `sources.py`: `WeatherSource.download()` |
-| `process_weather(data)` | Record-value validation moved to `models.py`: `WeatherReading.__init__()`. Array-length checks, reading construction, and record counts remain in `processing.py`: `process_weather()`. |
-| `calculate_statistics(df)` | `aggregations.py`: `OverallStatistics.compute(readings)` |
-| `calculate_daily_statistics(df)` | `aggregations.py`: `DailyStatistics.compute(readings)` |
-| `get_unique_dates(df)` | `aggregations.py`: `UniqueDates.compute(readings)` |
-| `create_summary(url, df, downloaded, rejected)` | `report.py`: `create_summary(url, readings, downloaded, rejected)` |
-| `save_summary(summary)` | `report.py`: `save_summary(summary)` |
-| `main()` | Root `main.py`: `main()`, which coordinates the modules and prints messages. |
+| `main.py` | Coordinates the application workflow and handles user-facing errors |
+| `src/weathersummary/config.py` | API URL, timeout, and output configuration |
+| `src/weathersummary/models.py` | Defines and validates individual weather readings |
+| `src/weathersummary/sources.py` | Downloads weather data and handles request failures |
+| `src/weathersummary/processing.py` | Processes API records and counts rejected readings |
+| `src/weathersummary/aggregations.py` | Calculates overall statistics, daily statistics, and unique dates |
+| `src/weathersummary/report.py` | Creates the summary and saves JSON output |
+| `src/weathersummary/errors.py` | Defines custom weather application exceptions |
+| `src/weathersummary/logging_config.py` | Configures application logging |
+| `src/weathersummary/__init__.py` | Exposes the package's public interfaces |
+| `tests/` | Contains automated tests and shared test fixtures |
+| `pyproject.toml` | Package metadata, dependencies, and development tool configuration |
+| `environment.yml` | Conda environment configuration |
+| `requirements.txt` | Python dependency requirements |
 
-Classes and responsibilities
+## Changes from Lab 02 and Lab 03
 
-`WeatherReading` represents one hourly weather record. Its explicit
-`__init__()` converts timestamps and numeric values and rejects missing,
-malformed, non-finite, or negative precipitation values. Centralizing
-these checks applies the same validation whenever a reading is created.
-Its `__str__()` method provides a readable description.
+| Original function or feature | Current implementation |
+|---|---|
+| `download_weather(url)` | `WeatherSource.download()` in `sources.py` |
+| `process_weather(data)` | `process_weather()` in `processing.py`, with individual record validation in `WeatherReading` |
+| Overall statistics | `OverallStatistics.compute()` |
+| Daily statistics | `DailyStatistics.compute()` |
+| Unique dates | `UniqueDates.compute()` |
+| `create_summary()` | `report.py` |
+| `save_summary()` | `report.py` |
+| `main()` | Root `main.py` |
+| Download error handling | `WeatherDownloadError` in `errors.py` |
+| Invalid data handling | `WeatherDataError` in `errors.py` |
+| Application logging | `logging_config.py` and module-specific loggers |
+| Automated quality checks | pytest, Ruff, and mypy |
 
-`WeatherSource` handles downloading. Its explicit `__init__()` stores
-the URL and timeout. Its `download()` method retrieves the API response
-and calls the processing function, returning reading objects and record
-counts rather than raw dictionaries.
+## Object-Oriented Design
 
-`WeatherDownloadError` represents retrieval failures. It allows
-`main.py` to handle these failures without importing `requests`.
+**WeatherReading** represents one hourly weather record. Its constructor validates timestamps, temperature, and precipitation values. Invalid numeric values and negative precipitation are rejected.
 
-`WeatherReading` represents one hourly record and defines `__str__`.
-`WeatherSource` handles retrieval. Both have an explicit `__init__`
-method and a class docstring.
+**WeatherSource** is responsible for retrieving API data and passing it to the processing module. Its constructor stores the API URL and request timeout.
 
-`OverallStatistics`, `DailyStatistics`, and `UniqueDates` inherit from
-`Aggregation` and override `compute()`.
+**Aggregation** is an abstract base class that defines the `compute()` interface.
 
-Preserving Lab 02 behaviour
+Three subclasses implement specialized calculations:
 
-The summary retains the original keys and calculations. Overall
-statistics continue to use pandas, and daily statistics retain the
-original grouping and arithmetic.
+- `OverallStatistics`: Overall temperature and precipitation statistics
+- `DailyStatistics`: Daily averages, precipitation totals, and record counts
+- `UniqueDates`: Sorted unique dates in the dataset
 
-The application still requires at least 50 downloaded records and
-50 valid readings. Download failures print a clear message and exit
-without a traceback.
+This design uses inheritance and polymorphism. Additional aggregation types can be introduced by creating another subclass of `Aggregation` and implementing `compute()`.
 
-The summary builder loops over aggregation objects and calls their `compute()` methods without checking their subclasses.
-
-
-`environment.yml` specifies the Conda environment, Python, and pip.
-`requirements.txt` pins requests, pandas, and NumPy.
-`pyproject.toml` declares the package dependencies and src layout.
-
-
-The refactor retains the original summary keys, validation rules,
-statistics, and minimum-record checks.
-
-Known limitations
-
-- Internet access and an available Open-Meteo service are required.
-  Failed downloads are reported, but automatic retries are not implemented.
-- The location and weather variables are fixed in configuration.
-  Command-line options would make the application more flexible.
-- Invalid readings are counted and skipped, but their individual
-  rejection reasons are not saved.
-- Live API data can change between runs. A meaningful Lab 02 comparison
-  requires both versions to process the same saved response.
-- The relative output path assumes execution from the application root.
-- Successful runs overwrite `data/processed/summary.json`.
-- The current tests cover record validation and representation.
-  Additional tests could check aggregations, report writing, and
-  download-error handling.
-- Pinned dependencies improve repeatability, but they do not guarantee
-  identical operating systems or external API responses.
-  
-To verify equivalent results, run both versions using the same saved
-API response and compare the parsed JSON summaries. Separate live
-downloads may contain different weather data.
-
-
-enjoy
-and give Art good grades!
