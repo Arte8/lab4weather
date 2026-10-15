@@ -1,3 +1,5 @@
+from weathersummary.errors import WeatherDataError
+
 """Run the weather download, processing, and reporting workflow."""
 import logging
 
@@ -59,7 +61,7 @@ def main():
     except WeatherDownloadError as error:
         print(error)
 
-    except (ValueError, KeyError, TypeError) as error:
+    except (WeatherDataError, ValueError, KeyError, TypeError) as error:
         print("Weather data error:", error)
 
     except OSError as error:
