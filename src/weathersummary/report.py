@@ -2,12 +2,12 @@
 
 import json
 
-from .config import OUTPUT_PATH
 from .aggregations import (
-    OverallStatistics,
     DailyStatistics,
+    OverallStatistics,
     UniqueDates,
 )
+from .config import OUTPUT_PATH
 
 
 def create_summary(url, readings, downloaded, rejected):

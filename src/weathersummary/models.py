@@ -17,10 +17,7 @@ class WeatherReading:
         self.temperature = float(temperature)
         self.precipitation = float(precipitation)
 
-        if not (
-            math.isfinite(self.temperature)
-            and math.isfinite(self.precipitation)
-        ):
+        if not (math.isfinite(self.temperature) and math.isfinite(self.precipitation)):
             raise ValueError("Missing or non-finite value")
 
         if self.precipitation < 0:

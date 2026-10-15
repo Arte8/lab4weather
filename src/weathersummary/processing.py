@@ -12,25 +12,15 @@ def process_weather(data):
     temperatures = hourly["temperature_2m"]
     precipitation = hourly["precipitation"]
 
-    if not (
-        len(times) == len(temperatures) == len(precipitation)
-    ):
-        raise ValueError(
-            "Weather data arrays have different lengths."
-        )
+    if not (len(times) == len(temperatures) == len(precipitation)):
+        raise ValueError("Weather data arrays have different lengths.")
 
     readings = []
     rejected = 0
 
-    for time, temperature, rainfall in zip(
-        times, temperatures, precipitation
-    ):
+    for time, temperature, rainfall in zip(times, temperatures, precipitation):
         try:
-            reading = WeatherReading(
-                time,
-                temperature,
-                rainfall
-            )
+            reading = WeatherReading(time, temperature, rainfall)
 
             readings.append(reading)
 

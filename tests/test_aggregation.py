@@ -1,9 +1,8 @@
-
 import pytest
 
 from weathersummary.aggregations import (
-    OverallStatistics,
     DailyStatistics,
+    OverallStatistics,
     UniqueDates,
 )
 

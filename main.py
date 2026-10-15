@@ -1,9 +1,8 @@
 """Run the weather download, processing, and reporting workflow."""
 
 from weathersummary import (
-    WeatherSource,
     WeatherDownloadError,
-    process_weather,
+    WeatherSource,
     create_summary,
     save_summary,
 )
@@ -16,7 +15,6 @@ def main():
     try:
         readings, downloaded, rejected = WeatherSource().download()
 
-
         if downloaded < 50:
             print("Error: Fewer than 50 records downloaded.")
             return 1
@@ -26,25 +24,17 @@ def main():
             print("Rejected records:", rejected)
             return 1
 
-        summary = create_summary(
-            URL, readings, downloaded, rejected
-        )
+        summary = create_summary(URL, readings, downloaded, rejected)
 
         stats = summary["overall_statistics"]
 
-        print("Minimum temperature:",
-              stats["minimum_temperature"], "°C")
-        print("Maximum temperature:",
-              stats["maximum_temperature"], "°C")
-        print("Mean temperature:",
-              stats["mean_temperature"], "°C")
+        print("Minimum temperature:", stats["minimum_temperature"], "°C")
+        print("Maximum temperature:", stats["maximum_temperature"], "°C")
+        print("Mean temperature:", stats["mean_temperature"], "°C")
 
-        print("Minimum precipitation:",
-              stats["minimum_precipitation"], "mm")
-        print("Maximum precipitation:",
-              stats["maximum_precipitation"], "mm")
-        print("Mean precipitation:",
-              stats["mean_precipitation"], "mm")
+        print("Minimum precipitation:", stats["minimum_precipitation"], "mm")
+        print("Maximum precipitation:", stats["maximum_precipitation"], "mm")
+        print("Mean precipitation:", stats["mean_precipitation"], "mm")
 
         print("\nDaily statistics:")
 

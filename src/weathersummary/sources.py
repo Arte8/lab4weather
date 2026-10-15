@@ -2,7 +2,7 @@
 
 import requests
 
-from .config import URL, TIMEOUT
+from .config import TIMEOUT, URL
 from .processing import process_weather
 
 
@@ -21,16 +21,11 @@ class WeatherSource:
         """Return readings, downloaded count, and rejected count."""
 
         try:
-            response = requests.get(
-                self.url,
-                timeout=self.timeout
-            )
+            response = requests.get(self.url, timeout=self.timeout)
             response.raise_for_status()
             data = response.json()
 
         except requests.RequestException as error:
-            raise WeatherDownloadError(
-                f"Weather download failed: {error}"
-            ) from error
+            raise WeatherDownloadError(f"Weather download failed: {error}") from error
 
         return process_weather(data)

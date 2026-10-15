@@ -12,7 +12,6 @@ class Aggregation(ABC):
     @abstractmethod
     def compute(self, readings):
         """Calculate a result from validated weather readings."""
-        pass
 
 
 class OverallStatistics(Aggregation):
@@ -23,11 +22,8 @@ class OverallStatistics(Aggregation):
     def compute(self, readings):
         # Use pandas to preserve the original Lab 02 calculations.
         df = pd.DataFrame(
-            [
-                (reading.temperature, reading.precipitation)
-                for reading in readings
-            ],
-            columns=["temperature", "precipitation"]
+            [(reading.temperature, reading.precipitation) for reading in readings],
+            columns=["temperature", "precipitation"],
         )
 
         return {
@@ -37,7 +33,7 @@ class OverallStatistics(Aggregation):
             "minimum_precipitation": float(df["precipitation"].min()),
             "maximum_precipitation": float(df["precipitation"].max()),
             "mean_precipitation": float(df["precipitation"].mean()),
-            "total_precipitation": float(df["precipitation"].sum())
+            "total_precipitation": float(df["precipitation"].sum()),
         }
 
 
@@ -52,21 +48,14 @@ class DailyStatistics(Aggregation):
         for reading in readings:
             date = reading.time.date().isoformat()
 
-            daily_records[date].append(
-                (reading.temperature, reading.precipitation)
-            )
+            daily_records[date].append((reading.temperature, reading.precipitation))
 
         return {
             date: {
-                "average_temperature": sum(
-                    record[0] for record in records
-                ) / len(records),
-
-                "total_precipitation": sum(
-                    record[1] for record in records
-                ),
-
-                "record_count": len(records)
+                "average_temperature": sum(record[0] for record in records)
+                / len(records),
+                "total_precipitation": sum(record[1] for record in records),
+                "record_count": len(records),
             }
             for date, records in daily_records.items()
         }
@@ -78,7 +67,4 @@ class UniqueDates(Aggregation):
     key = "unique_dates"
 
     def compute(self, readings):
-        return sorted({
-            reading.time.date().isoformat()
-            for reading in readings
-        })
+        return sorted({reading.time.date().isoformat() for reading in readings})

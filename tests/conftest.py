@@ -1,4 +1,3 @@
-
 import pytest
 
 from weathersummary import WeatherReading
